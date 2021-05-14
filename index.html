@@ -9,7 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- CDN vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-
+    <!-- CSS flags -->
+    <link rel="stylesheet" href="styles/css/flag-icon.min.css">
     <link rel="stylesheet" href="styles/style.css">
     <title>BoolFlix</title>
 </head>
@@ -23,13 +24,15 @@
         <div>
             <ul v-for ="film in filmsList">
                 <li>
+                    <img :src="getPoster(film)" alt="show cover">
                     <p>{{film.title}}</p>
                     <p>{{film.original_title}}</p>
-                    <p>{{film.original_language}}</p>
+                    <p>{{film.original_language}}  </p>
                     <p>{{film.vote_average}}</p>
+                    <span class="flag-icon" :class="getFlag(film)"></span>
                 </li>
             </ul>
-
+            
         </div>
       
 

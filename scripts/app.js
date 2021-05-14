@@ -16,6 +16,35 @@ film trovato:
 
 // es. chiamata API x serie tv https://api.themoviedb.org/3/search/tv?api_key=569d019eeee55f5bc12206acd16c8153&query=back future&language=it-ITA
 
+
+/* 
+Milestone 2
+
+Trasformiamo la stringa statica della lingua in una vera e propria bandiera della nazione corrispondente, gestendo il caso in cui non abbiamo la bandiera della nazione ritornata dall’API.
+
+!!! class: flag-icon-XX" sarà v-bind tamite mappatura lingua-paese
+
+cosa mi serve dei risultati di ritorno?
+            Movie:
+            1. Titolo - .title
+            2. Titolo Originale - .original_title
+            3. Lingua - .original_language
+            4. Voto - .vote_average
+
+
+*/
+
+/* 
+Milestone 3:
+In questa milestone come prima cosa aggiungiamo la copertina del film o della serie
+al nostro elenco. Ci viene passata dall’API solo la parte finale dell’URL, questo
+perché poi potremo generare da quella porzione di URL tante dimensioni diverse.
+Dovremo prendere quindi l’URL base delle immagini di TMDB:
+https://image.tmdb.org/t/p/ per poi aggiungere la dimensione che vogliamo generare -
+componenti url img : base_url, a file_size and a file_path.
+
+*/
+
 new Vue({
     el: '#root',
 
@@ -29,11 +58,20 @@ new Vue({
         // arrays vuoti dove inserire i risultati della ricerca - inseriti entrabi per film e serie TV poichè le chiamate differiscono
         filmsList: [],
         tvSeriesList: [],
+        //printedFlag = "flag-icon-" + getflag(),
+        img_baseUrl: "https://image.tmdb.org/t/p/",
+
 
     },
 
     methods: {
         doSearch() {
+            this.axiosForSearch("movie");
+            this.axiosForSearch("tv");
+            console.log(this.filmsList);
+            console.log(this.tvSeriesList);
+        },
+        axiosForSearch(type) {
             // mi salvo i parametri di ricerca in const a parte - inizio con soli film
             const APIParams = {
                 params: {
@@ -41,25 +79,59 @@ new Vue({
                     query: this.queryToSearch,
                     language: "it-IT",
                 }
-
             };
-            //viene fatta la chiamata API con valore input utente
-            axios.get("https://api.themoviedb.org/3/search/movie", APIParams)
+            // //viene fatta la chiamata API con valore input utente
+            axios.get("https://api.themoviedb.org/3/search/" + type, APIParams)
+                //condizione per movie e condizione per tv show in risposta
                 .then((resp) => {
-                    // inserisco risposta in array filmsList
-                    this.filmsList = resp.data.results;
-                    
-                });
-            console.log(this.filmsList)
-            return this.filmsList
+                    if (type == "movie") {
+                        // inserisco risposta in array filmsList
+                        this.filmsList = resp.data.results;
+                    } else if (type == "tv") {
+                        // inserisco risposta in array tvSeriesList
 
-            /* cosa mi serve dei risultati di ritorno?
-            Movie:
-            1. Titolo - .title
-            2. Titolo Originale - .original_title
-            3. Lingua - .original_language
-            4. Voto - .vote_average
-            */
+                        // ci sono però dati che differiscono per avere un solo elemento in stampa html- mappo tvSeriesList - in modo da avere anche lì .original_title .title e non .name
+                        this.tvSeriesList = resp.data.results.map((TVshow) => {
+                            TVshow.name = TVshow.title;
+                            TVshow.original_name = TVshow.original_title;
+                            return TVshow
+                        })
+                    }
+                });
+        },
+        getPoster(show) {
+            const posterSize = "w500"
+            const posterPath = show.poster_path
+            const completePosterPath = this.img_baseUrl + posterSize + posterPath;
+            return completePosterPath
+        },
+
+
+        //stampo bandiera con v-bind su classe : flag-icon - + risultato getFlag(). 
+
+        getFlag(show) {
+
+            //mi inserisco mappatura x stampa flags
+            const langToCountry = {
+
+                'en': ['gb', 'us', 'ca'],
+                'es': ['es', 'ar', 'co'],
+                'it': ['it'],
+                'fr': ['fr'],
+                'tr': ['tr'],
+                'zh': ['cn'],
+                'ja': ['jp'],
+            };
+            //la mia bandiera di ripiego é US
+            const fallbackFlag = 'us';
+            //devo verificare con risposta API .original_language
+            const queryOriginalLang = show.original_language;
+            //devo verificare che la queryOriginalLang coincida con una chiave di langToCountry               
+            // Object.keys(obj) – ritorno un array di key su cui posso usare metodo incoldes()
+            const chooseFlag = Object.keys(langToCountry).includes(queryOriginalLang) ? langToCountry[queryOriginalLang][0] : fallbackFlag;
+
+            return "flag-icon-" + chooseFlag
+
         },
     }
 })
