@@ -65,7 +65,9 @@ new Vue({
         filmsList: [],
         tvSeriesList: [],
         img_baseUrl: "https://image.tmdb.org/t/p/",
-        noImg_Url : "../img/noposter.png",
+        noImg_Url : "img/noposter.png",
+
+        // x over :  @mouseover='' ?
 
 
     },
@@ -76,6 +78,7 @@ new Vue({
             this.axiosForSearch("tv");
             console.log(this.filmsList);
             console.log(this.tvSeriesList);
+            this.queryToSearch = "";
         },
         axiosForSearch(type) {
             // mi salvo i parametri di ricerca in const a parte - inizio con soli film

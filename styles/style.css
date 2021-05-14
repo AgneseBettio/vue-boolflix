@@ -3,10 +3,125 @@
     padding: 0;
     box-sizing: border-box;
 }
+#root{
+    height: 100vh;
+    width: 100vw;
+    background-color: #000000;
+    font-family: 'Barlow', sans-serif;
+    color: #ffffff;
+}
+.blank-space{
+    flex-grow: 1;
+}
+.nav-bar{
+    padding: 8px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    background-color: #1b1b1b;
+}
+.logo-bar {
+    color: #ff0000;
+    font-size: 20px;
+    font-weight: 500;
+}
+.search-bar{
+    background-color: #ffffff;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 6px;
+    color: #464444;
+}
+.search-bar input {
+    flex-grow: 1;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 15px;
+    height: 24px;
+    border: none;
+}
+input:focus,
+input:active{
+    outline: none;
+}
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 40px;
+    height: calc(100vh - 50px);
+}
+.film-container{
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    padding: 2px 6px;
+}
+.show-card{
+    flex-basis: 20%;
+    height: 300px;
+    justify-self: flex-start;
+    position: relative;
+    padding: 4px 5px;
+    margin-bottom: 4px;
 
+}
+.cover-box{
+    width: 100%; 
+    height: 100%;
+    display: inline-block;
+    position: absolute;
+    border: 1px solid lightslategray;
+    
+}
+.cover-box > img {
+    width: 100%;   
+    height: 100%; 
+    object-fit: contain;
+    border-radius: 4px;
+} 
+.show-box {
+    display: inline-block;
+    position: absolute;
+    width: 100%; 
+    height: 100%;
+    background-color: rgba(163, 163, 163, 0.5);
+    color: black;
+    font-size: 14px;
+    font-weight: 300;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+}
+.show-box > div {
+    padding: 4px 8px;
+}
+.show-box .overview {
+    flex-grow: 1;
+    overflow: hidden;
+}
+.show-box .rakings {
+    display: flex;    
+}
+.show-box .original-language {
+    align-self: flex-end;
+}
+/* stelle - legate  a funzione per avarage */
 .gold-star {
     color: #ffd900;
 }
 .white-star {
     color: rgb(230, 213, 213)
+}
+
+
+.noImgTitle{
+    position: relative;
+    display: block;
+    color: rgb(161, 23, 23);
+    bottom: 40px;
+    text-align: center;
 }

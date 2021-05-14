@@ -15,6 +15,9 @@
 
     <!-- CSS flags -->
     <link rel="stylesheet" href="styles/css/flag-icon.min.css">
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">    
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="styles/style.css">
 
@@ -22,28 +25,59 @@
 </head>
 <body>
     <div id="root">
-        <div>
-            <input type="text" v-model="queryToSearch">
-            <button @click.prevent="doSearch"> search </button>
-        </div>
-        <!-- lista per stampare risultati chiamata API -->
-        <div>
-            <ul v-for ="(film, index) in filmsList">
-                <li>
-                    <img v-if="getPoster(film) == 'https://image.tmdb.org/t/p/w342null' " :src="noImg_Url" alt="imageNotFound">
-                    <img v-else :src="getPoster(film)" alt="show cover">
-                    <p>{{film.title}}</p>
-                    <p>{{film.original_title}}</p>
+        <nav class="nav-bar">
+            <div class="logo-bar">
+                <p><strong>BOOLFLIX</strong></p>
+            </div>
+            <div class="blank-space">
 
-                    <p>{{film.original_language}}</p>
-                    <span  class="flag-icon" :class="getFlag(film)"></span>
-                    
-                    <p>{{ Math.ceil(film.vote_average/2)}}</p>
-                    <i :class="starVote(film, index)" v-for="(star, index) in 5" aria-hidden="true"></i>
+            </div>
+            <div class="search-bar">
+                <input type="text" v-model="queryToSearch">
+                <span @click="doSearch"><i class="fa fa-search" aria-hidden="true"></i></span>
+            </div>
+        </nav>
+       
+        <!-- lista per stampare risultati chiamata API -->
+        <main>
+            <h3>Film</h3>
+            <div class="film-container">
                 
-                </li>
-            </ul>            
-        </div>
+                <div  class="show-card" v-for ="(film, index) in filmsList">
+
+                    <div  class="cover-box" v-if="getPoster(film) == 'https://image.tmdb.org/t/p/w342null' ">
+                        <img  :src="noImg_Url" alt="imageNotFound">
+                        <span class="noImgTitle">{{film.title}}</span>
+                    </div>
+                    <div class="cover-box" v-else>    
+                        <img :src="getPoster(film)" alt="show cover">
+                    </div>
+                    <!-- solo se in hover -->
+                    <div class="show-box">                    
+                        <div class="title">
+                            <p><strong> titolo: </strong>{{film.title}}</p>
+                            <p v-if="film.title != film.original_title"> <strong> titolo originale:</strong>  {{film.original_title}}</p>
+                        </div>
+                        <div class="overview">
+                            <p v-if ="film.overview == ''"><strong> overview:</strong> non disponibile</p>
+                            <p v-else><strong>overview:</strong> {{film.overview}}</p>
+                        </div>    
+                        <div class="rakings">
+                            <span><strong>voto</strong></span>
+                            <span class="blank-space"></span>
+                            <i :class="starVote(film, index)" v-for="(star, index) in 5" aria-hidden="true"></i> 
+                        </div>                  
+                        <div class="original-language">
+                            <span  class="flag-icon" :class="getFlag(film)"></span>  
+                        </div>                  
+                        
+            
+                    </div> 
+              
+                </div>
+
+            </div>     
+        </main>
 
     </div>    
     <script src="scripts/app.js"></script>
