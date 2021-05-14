@@ -3,3 +3,10 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.gold-star {
+    color: #ffd900;
+}
+.white-star {
+    color: rgb(230, 213, 213)
+}

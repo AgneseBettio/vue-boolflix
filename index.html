@@ -9,9 +9,15 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- CDN vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    
+    <!-- fontAwsome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <!-- CSS flags -->
     <link rel="stylesheet" href="styles/css/flag-icon.min.css">
+
     <link rel="stylesheet" href="styles/style.css">
+
     <title>BoolFlix</title>
 </head>
 <body>
@@ -22,22 +28,22 @@
         </div>
         <!-- lista per stampare risultati chiamata API -->
         <div>
-            <ul v-for ="film in filmsList">
+            <ul v-for ="(film, index) in filmsList">
                 <li>
-                    <img :src="getPoster(film)" alt="show cover">
+                    <img v-if="getPoster(film) == 'https://image.tmdb.org/t/p/w342null' " :src="noImg_Url" alt="imageNotFound">
+                    <img v-else :src="getPoster(film)" alt="show cover">
                     <p>{{film.title}}</p>
                     <p>{{film.original_title}}</p>
-                    <p>{{film.original_language}}  </p>
-                    <p>{{film.vote_average}}</p>
-                    <span class="flag-icon" :class="getFlag(film)"></span>
+
+                    <p>{{film.original_language}}</p>
+                    <span  class="flag-icon" :class="getFlag(film)"></span>
+                    
+                    <p>{{ Math.ceil(film.vote_average/2)}}</p>
+                    <i :class="starVote(film, index)" v-for="(star, index) in 5" aria-hidden="true"></i>
+                
                 </li>
-            </ul>
-            
+            </ul>            
         </div>
-      
-
-
-
 
     </div>    
     <script src="scripts/app.js"></script>

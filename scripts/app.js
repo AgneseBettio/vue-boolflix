@@ -43,6 +43,12 @@ Dovremo prendere quindi l’URL base delle immagini di TMDB:
 https://image.tmdb.org/t/p/ per poi aggiungere la dimensione che vogliamo generare -
 componenti url img : base_url, a file_size and a file_path.
 
+Trasformiamo poi il voto da 1 a 10 decimale in un numero intero da 1 a 5, così da
+permetterci di stampare a schermo un numero di stelle piene che vanno da 1 a 5,
+lasciando le restanti vuote (troviamo le icone in FontAwesome).
+Arrotondiamo sempre per eccesso all’unità successiva, non gestiamo icone mezze
+piene.
+
 */
 
 new Vue({
@@ -58,8 +64,8 @@ new Vue({
         // arrays vuoti dove inserire i risultati della ricerca - inseriti entrabi per film e serie TV poichè le chiamate differiscono
         filmsList: [],
         tvSeriesList: [],
-        //printedFlag = "flag-icon-" + getflag(),
         img_baseUrl: "https://image.tmdb.org/t/p/",
+        noImg_Url : "../img/noposter.png",
 
 
     },
@@ -99,16 +105,16 @@ new Vue({
                     }
                 });
         },
+        //stampo poster qui formato 500px
         getPoster(show) {
-            const posterSize = "w500"
+            const posterSize = "w342"
             const posterPath = show.poster_path
             const completePosterPath = this.img_baseUrl + posterSize + posterPath;
             return completePosterPath
         },
 
 
-        //stampo bandiera con v-bind su classe : flag-icon - + risultato getFlag(). 
-
+        //stampo bandiera con v-bind su classe 
         getFlag(show) {
 
             //mi inserisco mappatura x stampa flags
@@ -128,10 +134,20 @@ new Vue({
             const queryOriginalLang = show.original_language;
             //devo verificare che la queryOriginalLang coincida con una chiave di langToCountry               
             // Object.keys(obj) – ritorno un array di key su cui posso usare metodo incoldes()
-            const chooseFlag = Object.keys(langToCountry).includes(queryOriginalLang) ? langToCountry[queryOriginalLang][0] : fallbackFlag;
+            const chooseCountry = Object.keys(langToCountry).includes(queryOriginalLang) ? langToCountry[queryOriginalLang][0] : fallbackFlag;
+            //ritorno prima bandiera - più tardi implemento + bandiere?
+            return "flag-icon-" + chooseCountry
 
-            return "flag-icon-" + chooseFlag
-
+        },
+        // trasformo film average in stelline - voglio ciclare in un v-for di 5
+        starVote(show, index) {
+            const halfAverage = Math.ceil(show.vote_average/2);
+                if (index + 1 <= halfAverage) {
+                    return 'fa fa-star gold-star'
+                } else {
+                    return 'fa fa-star white-star'                
+            }
         },
     }
 })
+
