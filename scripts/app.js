@@ -61,14 +61,17 @@ new Vue({
         // v-model per verifica valori inseriti dall'user che saranno parte della mia chiamata API
         queryToSearch: "",
         // arrays vuoti dove inserire i risultati della ricerca - inseriti entrabi per film e serie TV poichè le chiamate differiscono
-        filmsList: [],
-        tvSeriesList: [],
+        filmsList: null,
+        tvSeriesList: null,
         img_baseUrl: "https://image.tmdb.org/t/p/",
         noImg_Url : "img/noposter.png",
         // condizione per mostrare info film 
         getInfo : false,
         currentShow : null,
-        genresList : [],
+        //pagina iniziale
+        popularFilmList : [],
+        //milestone 6
+        //genresList : [],
 
     },
 
@@ -192,6 +195,31 @@ new Vue({
             })
 
         },
-    }
+        //rotrna a pg iniziale
+        welcomePage(){
+            this.filmsList = null;
+            this.tvSeriesList = null;
+        }
+    },
+    mounted(){
+        //pagina iniziale
+        const APIParams = {
+            params: {
+                api_key: this.DMDApiKey,
+                language: "it-IT",
+            }
+        };
+        //chiamata per credits
+        axios.get(`https://api.themoviedb.org/3/movie/popular`, APIParams)
+
+        .then((resp) => {
+            //recuperi risultato che salvo in costante
+            this.popularFilmList = resp.data.results
+            console.log(this.popularFilmList);
+        })
+
+    },
+
+
 })
 

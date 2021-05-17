@@ -26,6 +26,7 @@
     color: #ff0000;
     font-size: 20px;
     font-weight: 500;
+    cursor: pointer;
 }
 .search-bar{
     background-color: #ffffff;
@@ -54,7 +55,15 @@ main {
     padding: 8px 40px;
     height: calc(100vh - 50px);
 }
-.film-container, .series-container{
+.show-on-search, 
+.welcome-page {
+    display: flex;
+    flex-direction: column;
+    /* padding: 8px 40px; */
+    height: 100%;
+}
+.film-container,
+.series-container{
     display: flex;
     flex-wrap: wrap;
     overflow: auto;
@@ -62,8 +71,19 @@ main {
     height: 50%;
     justify-content: flex-start;
 }
+.film-container.xl{
+    height: 100%;
+}
 main h3 {
     margin: 10px 0;
+}
+span.homepage{
+    display: flex;
+    flex-direction: row-reverse;
+}
+span.homepage a{
+    text-decoration: none;
+    color: red;
 }
 
 .show-card{
