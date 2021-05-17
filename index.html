@@ -33,7 +33,7 @@
 
             </div>
             <div class="search-bar">
-                <input type="text" v-model="queryToSearch">
+                <input type="text" v-model="queryToSearch" @keyup.enter="doSearch">
                 <span @click="doSearch"><i class="fa fa-search" aria-hidden="true"></i></span>
             </div>
         </nav>
@@ -42,6 +42,7 @@
         <main>
             <h3>Film</h3>
             <div class="film-container">
+                
                 
                 <div  class="show-card" v-for ="(film, index) in filmsList">
 
@@ -53,7 +54,7 @@
                         <img :src="getPoster(film)" alt="show cover">
                     </div>
                     <!-- solo se in hover -->
-                    <div class= "hover-box" @mouseover="getInfo = film.id" @mouseleave ="getInfo = null"> 
+                    <div class= "hover-box" @mouseover="getInfo = film.id" @mouseleave ="getInfo = null" > 
                         <div class="show-box" v-show="getInfo == film.id">
 
                             <div class="title">
@@ -61,26 +62,73 @@
                                 <p v-if="film.title != film.original_title"> <strong> titolo originale:</strong>  {{film.original_title}}</p>
                             </div>
                             <div class="overview-box">
-                                <p v-if ="film.overview == ''"><strong> overview:</strong> non disponibile</p>
+                                <p v-if ="film.overview == ''"><strong> overview:</strong> n.d</p>
                                 <p v-else><strong>overview:</strong>{{trimmedOverview(film)}}</p>
                             </div>    
                             <div class="rakings">
                                 <span><strong>voto</strong></span>
                                 <span class="blank-space"></span>
                                 <i :class="starVote(film, index)" v-for="(star, index) in 5" aria-hidden="true"></i> 
-                            </div>                  
-                            <div class="original-language">
+                            </div> 
+                            <div class="cast-box">
+                                <a href="#" @click="getCast(film)">cast</a>
+                                <span v-if="film.actors"> 
+                                    <span v-for="actors in film.actors">{{actors.original_name}}</span>
+                                </span>
+                            </div>                 
+                            <div class="original-language" v-if="!film.actors">
                                 <span  class="flag-icon" :class="getFlag(film)"></span> 
                             </div> 
 
                         </div>
                     </div>                                   
+                </div>
+            </div>
+            <h3>Serie TV</h3>
+            <div class="series-container">
                 
+                <div  class="show-card" v-for ="(tv, index) in tvSeriesList">
 
+                    <div  class="cover-box" v-if="getPoster(tv) == 'https://image.tmdb.org/t/p/w342null' ">
+                        <img  :src="noImg_Url" alt="imageNotFound">
+                        <span class="noImgTitle">{{tv.title}}</span>
+                    </div>
+                    <div class="cover-box" v-else>    
+                        <img :src="getPoster(tv)" alt="show cover">
+                    </div>
+                    <!-- solo se in hover -->
+                    <div class= "hover-box" @mouseover="getInfo = tv.id" @mouseleave ="getInfo = null"> 
+                        <div class="show-box" v-show="getInfo == tv.id">
 
+                            <div class="title">
+                                <p><strong> titolo: </strong>{{tv.title}}</p>
+                                <p v-if="tv.title != tv.original_title"> <strong> titolo originale:</strong>  {{tv.original_title}}</p>
+                            </div>
+                            <div class="overview-box">
+                                <p v-if ="tv.overview == ''"><strong> overview:</strong> n.d. </p>
+                                <p v-else><strong>overview:</strong>{{trimmedOverview(tv)}}</p>
+                            </div>    
+                            <div class="rakings">
+                                <span><strong>voto</strong></span>
+                                <span class="blank-space"></span>
+                                <i :class="starVote(tv, index)" v-for="(star, index) in 5" aria-hidden="true"></i> 
+                            </div>
+                            <div class="cast-box">
+                                <a href="#" @click="getCast(tv)">cast</a>
+                                <span v-if="tv.actors"> 
+                                    <span v-for="actors in tv.actors" class="MaxGrowth">{{actors.original_name}}</span>
+                                </span>
+                            </div>                                   
+                            <div class="original-language" v-if="!tv.actors">
+                                <span  class="flag-icon" :class="getFlag(tv)"></span> 
+                            </div> 
+
+                        </div>
+                    </div>                                   
                 </div>
 
-            </div>     
+            </div>
+
         </main>
 
     </div>    

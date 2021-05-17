@@ -58,7 +58,6 @@ new Vue({
     data: {
         //mi metto in variabile api_key
         DMDApiKey: '569d019eeee55f5bc12206acd16c8153',
-
         // v-model per verifica valori inseriti dall'user che saranno parte della mia chiamata API
         queryToSearch: "",
         // arrays vuoti dove inserire i risultati della ricerca - inseriti entrabi per film e serie TV poichè le chiamate differiscono
@@ -66,12 +65,10 @@ new Vue({
         tvSeriesList: [],
         img_baseUrl: "https://image.tmdb.org/t/p/",
         noImg_Url : "img/noposter.png",
-        
+        // condizione per mostrare info film 
         getInfo : false,
-
-        // x over :  @mouseover='' ?
-       
-
+        currentShow : null,
+        genresList : [],
 
     },
 
@@ -92,8 +89,11 @@ new Vue({
                     language: "it-IT",
                 }
             };
-            // //viene fatta la chiamata API con valore input utente
-            axios.get("https://api.themoviedb.org/3/search/" + type, APIParams)
+            if( this.queryToSearch == "") {
+                return
+            } else {
+                // //viene fatta la chiamata API con valore input utente
+                axios.get("https://api.themoviedb.org/3/search/" + type, APIParams)
                 //condizione per movie e condizione per tv show in risposta
                 .then((resp) => {
                     if (type == "movie") {
@@ -104,12 +104,15 @@ new Vue({
 
                         // ci sono però dati che differiscono per avere un solo elemento in stampa html- mappo tvSeriesList - in modo da avere anche lì .original_title .title e non .name
                         this.tvSeriesList = resp.data.results.map((TVshow) => {
-                            TVshow.name = TVshow.title;
-                            TVshow.original_name = TVshow.original_title;
+                            TVshow.title = TVshow.name 
+                            TVshow.original_title = TVshow.original_name;
+                            TVshow.tvSeries = true;
                             return TVshow
                         })
                     }
-                });
+                })
+            }
+       
         },
         //stampo poster qui formato 500px
         getPoster(show) {
@@ -118,8 +121,6 @@ new Vue({
             const completePosterPath = this.img_baseUrl + posterSize + posterPath;
             return completePosterPath
         },
-
-
         //stampo bandiera con v-bind su classe 
         getFlag(show) {
 
@@ -135,7 +136,7 @@ new Vue({
                 'ja': ['jp'],
             };
             //la mia bandiera di ripiego é US
-            const fallbackFlag = 'us';
+            const fallbackFlag = 'xx';
             //devo verificare con risposta API .original_language
             const queryOriginalLang = show.original_language;
             //devo verificare che la queryOriginalLang coincida con una chiave di langToCountry               
@@ -157,13 +158,39 @@ new Vue({
         // limita parole overview
         trimmedOverview(show){
             const overview = show.overview;
-            //slice per prendere primi 120 caratteri
-            let trimmedOverview = overview.slice(0, 120);
-            if (overview.length > 120) {
+            //slice per prendere primi 80 caratteri
+            let trimmedOverview = overview.slice(0, 80);
+            if (overview.length > 80) {
                 return trimmedOverview + '...'
             } else {
                 return overview;
             }
+        },
+        //milestone 5 mostrare primi 5 attori
+        getCast(show){
+        //variabile per selezionare il film preso in analisi
+           this.currentShow = show
+            const APIParams = {
+                params: {
+                    api_key: this.DMDApiKey,
+                    language: "it-IT",
+                }
+            };
+            const showType = show.tvSeries ? "tv" : "movie";
+            //chiamata per credits
+            axios.get(`https://api.themoviedb.org/3/${showType}/${show.id}/credits`, APIParams)
+
+            .then((resp) => {
+                //applico direttamente metodo slice() per recuperare primi 5 attori da cast completo
+                this.currentShow.actors = resp.data.cast
+
+                if(this.currentShow.actors.length == 0){
+                    return "n.d"
+                } else {
+                    return this.currentShow.actors = resp.data.cast.slice(0, 5);
+                }
+            })
+
         },
     }
 })
