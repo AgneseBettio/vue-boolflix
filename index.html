@@ -53,27 +53,31 @@
                         <img :src="getPoster(film)" alt="show cover">
                     </div>
                     <!-- solo se in hover -->
-                    <div class="show-box">                    
-                        <div class="title">
-                            <p><strong> titolo: </strong>{{film.title}}</p>
-                            <p v-if="film.title != film.original_title"> <strong> titolo originale:</strong>  {{film.original_title}}</p>
+                    <div class= "hover-box" @mouseover="getInfo = film.id" @mouseleave ="getInfo = null"> 
+                        <div class="show-box" v-show="getInfo == film.id">
+
+                            <div class="title">
+                                <p><strong> titolo: </strong>{{film.title}}</p>
+                                <p v-if="film.title != film.original_title"> <strong> titolo originale:</strong>  {{film.original_title}}</p>
+                            </div>
+                            <div class="overview-box">
+                                <p v-if ="film.overview == ''"><strong> overview:</strong> non disponibile</p>
+                                <p v-else><strong>overview:</strong>{{trimmedOverview(film)}}</p>
+                            </div>    
+                            <div class="rakings">
+                                <span><strong>voto</strong></span>
+                                <span class="blank-space"></span>
+                                <i :class="starVote(film, index)" v-for="(star, index) in 5" aria-hidden="true"></i> 
+                            </div>                  
+                            <div class="original-language">
+                                <span  class="flag-icon" :class="getFlag(film)"></span> 
+                            </div> 
+
                         </div>
-                        <div class="overview">
-                            <p v-if ="film.overview == ''"><strong> overview:</strong> non disponibile</p>
-                            <p v-else><strong>overview:</strong> {{film.overview}}</p>
-                        </div>    
-                        <div class="rakings">
-                            <span><strong>voto</strong></span>
-                            <span class="blank-space"></span>
-                            <i :class="starVote(film, index)" v-for="(star, index) in 5" aria-hidden="true"></i> 
-                        </div>                  
-                        <div class="original-language">
-                            <span  class="flag-icon" :class="getFlag(film)"></span>  
-                        </div>                  
-                        
-            
-                    </div> 
-              
+                    </div>                                   
+                
+
+
                 </div>
 
             </div>     

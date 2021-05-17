@@ -66,8 +66,11 @@ new Vue({
         tvSeriesList: [],
         img_baseUrl: "https://image.tmdb.org/t/p/",
         noImg_Url : "img/noposter.png",
+        
+        getInfo : false,
 
         // x over :  @mouseover='' ?
+       
 
 
     },
@@ -149,6 +152,17 @@ new Vue({
                     return 'fa fa-star gold-star'
                 } else {
                     return 'fa fa-star white-star'                
+            }
+        },
+        // limita parole overview
+        trimmedOverview(show){
+            const overview = show.overview;
+            //slice per prendere primi 120 caratteri
+            let trimmedOverview = overview.slice(0, 120);
+            if (overview.length > 120) {
+                return trimmedOverview + '...'
+            } else {
+                return overview;
             }
         },
     }
