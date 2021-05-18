@@ -90,7 +90,7 @@
             
             <div class="show-on-search" v-else>  
                 <span class="homepage">
-                    <a href="#" @click="welcomePage"> torna alla pagina iniziale </a>
+                    <a href="#" @click="welcomePage"> <strong> torna alla pagina iniziale </strong> </a>
                 </span>          
                 <h3>Film</h3>                
                 <div class="film-container">
@@ -111,7 +111,7 @@
 
                                 <div class="title">
                                     <p><strong> titolo: </strong>{{film.title}}</p>
-                                    <p v-if="film.title != film.original_title"> <strong> titolo originale:</strong>  {{film.original_title}}</p>
+                                    <p v-if="film.title != film.original_title"> <strong> titolo originale:</strong> {{film.original_title}}  </p>
                                 </div>
                                 <div class="overview-box">
                                     <p v-if ="film.overview == ''"><strong> overview:</strong> n.d</p>

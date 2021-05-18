@@ -130,7 +130,7 @@ new Vue({
             //mi inserisco mappatura x stampa flags
             const langToCountry = {
 
-                'en': ['gb', 'us', 'ca'],
+                'en': ['us', 'gb', 'ca'],
                 'es': ['es', 'ar', 'co'],
                 'it': ['it'],
                 'fr': ['fr'],
@@ -195,10 +195,14 @@ new Vue({
             })
 
         },
-        //rotrna a pg iniziale
+        //ritorna a pg iniziale
         welcomePage(){
             this.filmsList = null;
             this.tvSeriesList = null;
+        },
+        //filtro per generi attivi?
+        getGenreCodes(showList){
+ 
         }
     },
     mounted(){
@@ -216,7 +220,7 @@ new Vue({
             //recuperi risultato che salvo in costante
             this.popularFilmList = resp.data.results
             console.log(this.popularFilmList);
-        })
+        });
 
     },
 
